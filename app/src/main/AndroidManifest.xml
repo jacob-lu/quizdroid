@@ -15,22 +15,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".MarvelSuperHeroTopicOverview" />
-        <activity android:name=".MarvelSuperHeroQuestion1" />
-        <activity android:name=".MarvelSuperHeroAnswerPage" />
-        <activity android:name=".MarvelSuperHeroQuestion2"/>
-        <activity android:name=".MathTopicOverview"/>
-        <activity android:name=".MathAnswerPage"/>
-        <activity android:name=".MathQuestion1"/>
-        <activity android:name=".MathQuestion2"/>
-        <activity android:name=".MathQuestion3"/>
-        <activity android:name=".PhysicsTopicOverview"/>
-        <activity android:name=".PhysicsAnswerPage"/>
-        <activity android:name=".PhysicsQuestion1"/>
-        <activity android:name=".PhysicsQuestion2"/>
-        <activity android:name=".PhysicsQuestion3"/>
-        <activity android:name=".MarvelSuperHeroQuestion3"></activity>
-    </application>
+
+        <activity android:name=".TopicOverview">
+
+        </activity>
+
+</application>
 
 </manifest>

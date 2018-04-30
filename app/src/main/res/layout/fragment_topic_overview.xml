@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MarvelSuperHeroTopicOverview">
+    tools:context=".FragmentTopic">
 
     <TextView
         android:id="@+id/TopicDescription"
@@ -12,7 +12,7 @@
         android:layout_height="127dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
-        android:text="Topic Description: Marvel Super Heroes are a cartoon series originated in the U.S "
+        android:text="Topic Description: Math is using numbers to find significant calculations"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
