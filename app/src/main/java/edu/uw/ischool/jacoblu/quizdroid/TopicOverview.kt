@@ -17,10 +17,8 @@ class TopicOverview : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_main)
-        val TopicDescription = intent.getStringExtra("TopicDescription")
         val transaction = fragmentManager.beginTransaction()
         val bundle = Bundle()
-        bundle.putString("TopicDescription", TopicDescription)
         bundle.putString("Topic", intent.getStringExtra("Topic"))
         val fragmentTopic = FragmentTopic()
         fragmentTopic.arguments = bundle

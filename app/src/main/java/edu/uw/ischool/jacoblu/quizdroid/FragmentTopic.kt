@@ -14,8 +14,8 @@ class FragmentTopic : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.fragment_topic_overview, container, false) as View
-        val BeginButton = view.findViewById<Button>(R.id.BeginButton)
-        val TopicDescription = arguments!!.getString("TopicDescription")
+        val BeginButton = view.findViewById(R.id.BeginButton) as Button
+        val TopicDescription :String = QuizApp.getInfo.getTopics().get(arguments!!.getString("Topic"))!!.longD
         val topic = view.findViewById<TextView>(R.id.TopicDescription)
         topic.setText(TopicDescription)
         BeginButton.setOnClickListener {
@@ -26,7 +26,7 @@ class FragmentTopic : Fragment() {
             fragmentQuiz.arguments = bundle
             bundle.putInt("PageNumber", 0)
             bundle.putInt("NumberCorrect", 0)
-            bundle.putString("Topic", arguments!!.getString("Topic"))
+            bundle.putString("Topic", QuizApp.getInfo.getTopics().get(arguments!!.getString("Topic"))!!.title)
             transaction.replace(R.id.fragmentHolder, fragmentQuiz).commit()
         }
         return view

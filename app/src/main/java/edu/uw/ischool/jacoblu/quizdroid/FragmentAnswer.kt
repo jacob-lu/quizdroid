@@ -4,6 +4,7 @@ import android.app.Fragment
 import android.app.FragmentTransaction
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,10 @@ class FragmentAnswer : Fragment() {
         val correctAnswer = view.findViewById<TextView>(R.id.CorrectAnswer)
         val howManyCorrect = view.findViewById<TextView>(R.id.HowMany)
         userAnswer.setText("Your Answer: " + arguments!!.getString("UserAnswer"))
-        correctAnswer.setText("Correct Answer: " + arguments!!.getString("CorrectAnswer"))
+        //correctAnswer.setText("Correct Answer: " + arguments!!.getString("CorrectAnswer"))
+        val correctIndex = QuizApp.getInfo.getQuestion(arguments!!.getString("Topic"), (arguments!!.getInt("PageNumber")-1))!!.answerInteger
+        correctAnswer.setText("Correct Answer: " + QuizApp.getInfo.getQuestion(arguments!!.getString("Topic"),
+                (arguments!!.getInt("PageNumber"))-1)!!.answers[correctIndex])
         howManyCorrect.setText("You have " + arguments!!.getInt("NumberCorrect").toString() + " out of 3 correct")
 
         if(arguments!!.getInt("PageNumber") == 3) {
