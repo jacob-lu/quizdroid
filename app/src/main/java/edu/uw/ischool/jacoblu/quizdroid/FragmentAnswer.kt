@@ -24,9 +24,9 @@ class FragmentAnswer : Fragment() {
         val correctIndex = QuizApp.getInfo.getQuestion(arguments!!.getString("Topic"), (arguments!!.getInt("PageNumber")-1))!!.answerInteger
         correctAnswer.setText("Correct Answer: " + QuizApp.getInfo.getQuestion(arguments!!.getString("Topic"),
                 (arguments!!.getInt("PageNumber"))-1)!!.answers[correctIndex])
-        howManyCorrect.setText("You have " + arguments!!.getInt("NumberCorrect").toString() + " out of 3 correct")
-
-        if(arguments!!.getInt("PageNumber") == 3) {
+        howManyCorrect.setText("You have " + arguments!!.getInt("NumberCorrect").toString() + " out of " +
+                QuizApp.getInfo.getTopics().get(arguments!!.getString("Topic"))!!.questions.size+ " correct")
+        if(arguments!!.getInt("PageNumber") == QuizApp.getInfo.getTopics().get(arguments!!.getString("Topic"))!!.questions.size) {
             finishButton.setVisibility(View.VISIBLE)
         } else {
             nextButton.setVisibility(View.VISIBLE)
