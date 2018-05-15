@@ -6,18 +6,9 @@ import android.os.AsyncTask
 import android.os.Environment
 import android.util.Log
 import org.json.JSONArray
-import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import android.support.v4.app.ActivityCompat.startActivityForResult
-import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.provider.Settings
-import android.support.v4.content.ContextCompat.startActivity
+import java.io.*
 
 
 class QuizApp : Application() {
@@ -38,7 +29,6 @@ class StoredApp: AsyncTask<String,String,String>, TopicRepository{
     private var topics: Map<String,Quiz> ?= null
     var url = ""
 
-
     constructor() {
         url = "http://tednewardsandbox.site44.com/questions.json"
         execute(url).get()
@@ -46,7 +36,6 @@ class StoredApp: AsyncTask<String,String,String>, TopicRepository{
 
     override fun doInBackground(vararg p0: String?): String  {
 
-        val connection = URL(url).openConnection() as HttpURLConnection
         // code borrowed from https://stackoverflow.com/questions/3551821/android-write-to-sd-card-folder?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
         try {
             val sdcard = Environment.getExternalStorageDirectory()
@@ -65,8 +54,8 @@ class StoredApp: AsyncTask<String,String,String>, TopicRepository{
             Log.d("MainActivity", "Error: Download fails or is interrupted")
         }
 
-
-        val inputString = BufferedInputStream(connection.inputStream).use { it.reader().use { it.readText() } }
+            val connection = URL(url).openConnection() as HttpURLConnection
+            val inputString = BufferedInputStream(connection.inputStream).use { it.reader().use { it.readText() } }
 
         val array = JSONArray(inputString)
         //iterate through objects

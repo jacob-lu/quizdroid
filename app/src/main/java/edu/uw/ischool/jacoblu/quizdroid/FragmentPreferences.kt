@@ -25,7 +25,6 @@ class FragmentPreferences : Fragment(){
             val intent = Intent(activity, MainActivity::class.java)
             intent.putExtra("URL",editURL.text.toString())
             intent.putExtra("Interval", timeInterval.text.toString())
-            //StoredApp().url = editURL.text.toString()
             startActivity(intent)
         }
         return view
