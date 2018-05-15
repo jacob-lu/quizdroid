@@ -1,38 +1,72 @@
 package edu.uw.ischool.jacoblu.quizdroid
-
-import android.Manifest
-import android.annotation.TargetApi
-import android.app.Activity
 import android.app.Application
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
+import android.content.Context
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.os.AsyncTask
 import android.os.Environment
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityCompat.requestPermissions
 import android.util.Log
 import org.json.JSONArray
+import java.io.BufferedInputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.io.File
-import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import android.support.v4.app.ActivityCompat.startActivityForResult
+import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.provider.Settings
+import android.support.v4.content.ContextCompat.startActivity
 
-class QuizApp: Application(), TopicRepository {
+
+class QuizApp : Application() {
     companion object {
-        lateinit var getInfo : QuizApp
-        private set
-        lateinit var topics : Map<String,Quiz>
+        lateinit var getInfo: StoredApp
         private set
     }
 
     override fun onCreate() {
         super.onCreate()
+        Log.i("QuizApp", "quiz app works!")
+        getInfo = StoredApp()
+    }
 
-        Log.i("QuizApp", "I am being run!")
-        val sdcard = Environment.getExternalStorageDirectory()
-        val specificfile= File(sdcard, "extracredquestions.json")
-        val inputStream = FileInputStream(specificfile)
-        val inputString = inputStream.bufferedReader().use {
-            it.readText()
+}
+
+class StoredApp: AsyncTask<String,String,String>, TopicRepository{
+    private var topics: Map<String,Quiz> ?= null
+    var url = ""
+
+
+    constructor() {
+        url = "http://tednewardsandbox.site44.com/questions.json"
+        execute(url).get()
+    }
+
+    override fun doInBackground(vararg p0: String?): String  {
+
+        val connection = URL(url).openConnection() as HttpURLConnection
+        // code borrowed from https://stackoverflow.com/questions/3551821/android-write-to-sd-card-folder?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+        try {
+            val sdcard = Environment.getExternalStorageDirectory()
+            val url = URL("http://tednewardsandbox.site44.com/questions.json")
+            val connection = url.openConnection() as HttpURLConnection
+            val file = FileOutputStream(File(sdcard, "questions.json"))
+            val inputstream : InputStream = connection.getInputStream()
+            val buffer = ByteArray(1024)
+            var len1 = inputstream.read(buffer)
+            while (len1 > 0) {
+                file.write(buffer, 0, len1)
+                len1 = inputstream.read(buffer)
+            }
+            file.close()
+        } catch (e: Exception) {
+            Log.d("MainActivity", "Error: Download fails or is interrupted")
         }
+
+
+        val inputString = BufferedInputStream(connection.inputStream).use { it.reader().use { it.readText() } }
 
         val array = JSONArray(inputString)
         //iterate through objects
@@ -61,19 +95,20 @@ class QuizApp: Application(), TopicRepository {
             quizzes.put(topic,storeQuiz)
 
         }
-        getInfo = this
         topics = quizzes
-
+        return inputString
     }
 
     override fun getTopics(): Map<String,Quiz> {
-        return topics
+        return topics!!
     }
 
     override fun getQuestion(key: String, questionNumber : Int): Question? {
-        return topics.get(key)!!.questions[questionNumber]
+        return topics!!.get(key)!!.questions[questionNumber]
     }
 }
+
+
 
 data class Question (val question: String, val answers: Array<String>, val answerInteger: Int)
 data class Quiz (val title:String, val shortD: String, val longD: String, val questions: ArrayList<Question>)
@@ -82,3 +117,5 @@ interface TopicRepository {
     fun getTopics(): Map<String,Quiz>
     fun getQuestion(key: String, questionNumber: Int): Question?
 }
+
+
